@@ -1,0 +1,47 @@
+{
+  "name": "nodejs-server-boilerplate",
+  "version": "1.0.0",
+  "description": "Boilerplate for a Node.js Server with either MySQL or MONGODB as database. (Ofcourse you can use some other databases.)",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js ",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/donymvarkey/nodejs-server-boilerplate.git"
+  },
+  "keywords": [
+    "backend",
+    "nodejs",
+    "mysql",
+    "mongodb",
+    "server",
+    "template"
+  ],
+  "author": "Dony M Varkey",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/donymvarkey/nodejs-server-boilerplate.git"
+  },
+  "homepage": "https://github.com/donymvarkey/nodejs-server-boilerplate.git#README",
+  "dependencies": {
+    "app-root-path": "^3.0.0",
+    "bluebird": "^3.5.3",
+    "body-parser": "^1.19.0",
+    "chalk": "^2.4.2",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.16.4",
+    "express-validator": "^5.3.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.15",
+    "morgan": "^1.10.0",
+    "mysql": "^2.18.1",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "nodemon": "^2.0.7"
+  }
+}
