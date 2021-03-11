@@ -6,6 +6,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const chalk = require('chalk');
+const cors = require('cors');
 
 /**
  * Importing the DB Controllers for MongoDB and MySQL.
@@ -19,7 +20,10 @@ const {connectMongodb, connectMySQL} = require('./controllers/DataBaseController
 const {logger} = require('./config/Winston')
 
 
-const cors = require('cors');
+/**
+ * Import your Routes here.
+ * eg: const UserRoute = require('./src/routes/UserRoute')
+ */
 
 class Server{
     /**
@@ -66,6 +70,10 @@ class Server{
     }
 
     async mountRoutes(){
+        /**
+         * Plug your routes here.
+         * Eg: this.api.use(UserRoute);
+         */
 
         return true;
     }
@@ -78,7 +86,7 @@ class Server{
         connectMongodb(this.options.mongodb.uri)
 
         // Mysql database connection goes here
-
+        connectMySQL(this.options.mysql)
     
         var serverConfigStatus = await this.configServer();
 
@@ -91,7 +99,7 @@ class Server{
 
         // start the server
         this.api.listen( this.options.port,() =>{
-            console.log(chalk.blue("INFO Server Started."));
+            console.log(chalk.blue("INFO: Server Started."));
             console.log(chalk.green(`Listening on http://127.0.0.1:${this.options.port}`));
         });
     }

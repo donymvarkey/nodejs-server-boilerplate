@@ -1,6 +1,7 @@
-//common defaults and configs
+/**
+ * Add your default values and configs here
+ */
 
 module.exports = {
-    ADMIN: 7432,
-    USER: 3214
+    
 }
