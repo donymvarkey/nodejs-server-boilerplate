@@ -1,14 +1,16 @@
 /**
- * Winston.js
- * Config for winston to log to a file and console
- * Errors will be logged to the /logs/app.log file and console.
+ * config.js
+ * This file contains config for your application.
  * Modiy the config to fit your own use case
  */
 
 var appRoot = require('app-root-path');
 var winston = require('winston');
 
-// define the custom settings for each transport (file, console)
+/**
+ * Config for winston to log to a file and console
+ * Errors will be logged to the /logs/app.log file and console.
+ */
 var options = {
   file: {
     level: 'info',
@@ -36,4 +38,4 @@ var logger = new winston.createLogger({
   exitOnError: false, // do not exit on handled exceptions
 });
 
-module.exports = logger;
+module.exports = { logger };

@@ -11,13 +11,15 @@ const cors = require('cors');
 /**
  * Importing the DB Controllers for MongoDB and MySQL.
  * You can add controllers for other DBs in the ./controllers/DataBaseController.js file
+ * Uncomment the below code for MongoDB
  */
-const {connectMongodb, connectMySQL} = require('./controllers/DataBaseController')
+
+// const {connectMongodb} = require('./controllers/DataBaseController')
 
 /**
  * Importing the config for Winston
  */
-const {logger} = require('./config/Winston')
+const {logger} = require('./config')
 
 
 /**
@@ -83,10 +85,10 @@ class Server{
      */
     async startServer(){
         // MongoDB database connection goes here
-        connectMongodb(this.options.mongodb.uri)
+        // connectMongodb(this.options.mongodb.uri)
 
         // Mysql database connection goes here
-        connectMySQL(this.options.mysql)
+        // connectMySQL(this.options.mysql)
     
         var serverConfigStatus = await this.configServer();
 
