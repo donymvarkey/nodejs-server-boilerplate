@@ -44,5 +44,30 @@ module.exports = {
                 msg : 'auth error'
             });
         }
+    },
+
+    isAdmin : function(req, res, next) {
+        let verificationHeader = req.headers['x-auth-token'];
+
+        try{
+            
+            let verify = jwt.verify(verificationHeader, process.env.SIGNATURE);
+            if (verify.userType !== 'admin') {
+               res.status(403).json({
+                   status: false,
+                   msg: 'Unauthorized access'
+               }) 
+               return;
+            }
+
+            next();
+        }
+        catch(e){
+            
+            res.status(401).json({
+                status : false,
+                msg : 'auth error'
+            });
+        }
     }
 }

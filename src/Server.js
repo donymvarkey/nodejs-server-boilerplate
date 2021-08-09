@@ -10,16 +10,19 @@ const cors = require('cors');
 
 /**
  * Importing the DB Controllers for MongoDB and MySQL.
- * You can add controllers for other DBs in the ./controllers/DataBaseController.js file
+ * You can add controllers for other DBs in the ./database/DataBaseController.js file
  * Uncomment the below code for MongoDB
  */
 
-// const {connectMongodb} = require('./controllers/DataBaseController')
+// const {connectMongodb} = require('./database/DataBaseController')
 
 /**
  * Importing the config for Winston
  */
 const {logger} = require('./config')
+
+//Import the error handling middleware
+const { handleError } = require('./helpers/ErrorHandler');
 
 
 /**
@@ -61,10 +64,13 @@ class Server{
             });
 
         });
+        api.use((err, req, res, next) => {
+            handleError(err, res);
+        })
         //ignore this route
         api.use('/s',express.static('./src/public'))
         api.set('x-powered-by',false);
-        api.set('signature',this.options.signature);
+        api.set('signature', this.options.signature);
 
         this.api     = api;
 
