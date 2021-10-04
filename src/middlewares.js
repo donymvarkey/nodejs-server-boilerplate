@@ -25,7 +25,7 @@ module.exports = {
         if(verificationHeader === undefined || verificationHeader === null || verificationHeader === ''){
             res.status(401).json({
                 status : false,
-                msg : 'auth error'
+                msg : 'authentication error'
             });
             return;
         }
@@ -41,7 +41,7 @@ module.exports = {
             
             res.status(401).json({
                 status : false,
-                msg : 'auth error'
+                msg : 'authentication error'
             });
         }
     },
@@ -66,7 +66,7 @@ module.exports = {
             
             res.status(401).json({
                 status : false,
-                msg : 'auth error'
+                msg : 'authorization error'
             });
         }
     }
