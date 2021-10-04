@@ -21,9 +21,6 @@ const cors = require('cors');
  */
 const {logger} = require('./config')
 
-//Import the error handling middleware
-const { handleError } = require('./helpers/ErrorHandler');
-
 
 /**
  * Import your Routes here.
