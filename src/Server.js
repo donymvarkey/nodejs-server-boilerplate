@@ -1,114 +1,77 @@
-/**
- * Server.js
- * Configurations for the Server
- */
-const express = require('express');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
-const chalk = require('chalk');
-const cors = require('cors');
+const express = require("express");
+const bodyParser = require("body-parser");
+const morgan = require("morgan");
+const cors = require("cors");
+const { connectMongodb } = require("./database/DataBaseController");
+const { logger } = require("./config");
 
-/**
- * Importing the DB Controllers for MongoDB and MySQL.
- * You can add controllers for other DBs in the ./database/DataBaseController.js file
- * Uncomment the below code for MongoDB
- */
+const AuthRoute = require("./routes/AuthRoute");
 
-// const {connectMongodb} = require('./database/DataBaseController')
+class Server {
+  constructor(options) {
+    this.options = options;
 
-/**
- * Importing the config for Winston
- */
-const {logger} = require('./config')
+    this.api = null;
+  }
 
+  async configServer() {
+    var api = express();
 
-/**
- * Import your Routes here.
- * eg: const UserRoute = require('./src/routes/UserRoute')
- */
+    api.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
+    api.use(bodyParser.json({ limit: "10mb", extended: true }));
+    api.use(cors()); //allow cross domain requesting of urls
+    api.use(morgan("dev"));
 
-class Server{
-    /**
-     * @constructor
-     * @param options  the socket of the app
-     */
-    constructor(options){
+    //echo route
+    api.use("/echo", function (req, res) {
+      res.json({
+        health: true,
+      });
+    });
 
-        this.options = options;
+    // api.use("/s", express.static("./src/public"));
+    api.set("x-powered-by", false);
+    api.set("signature", this.options.signature);
 
-        //for general http server
-        this.api = null;
+    this.api = api;
+
+    return true;
+  }
+
+  async mountRoutes() {
+    this.api.use("/api/auth", AuthRoute);
+    return true;
+  }
+
+  async startServer() {
+    // connectMongodb(this.options.mongodb.uri)
+
+    var serverConfigStatus = await this.configServer();
+
+    if (serverConfigStatus !== true) {
+      logger.error("FATAL: Failed to configure server");
+      return false;
     }
 
-    /**
-     * @configServer
-     * used to initialise the api attribute with an object of express
-     */
-    async configServer(){
-
-        var api = express();
-
-        api.use(bodyParser.urlencoded({limit: '10mb', extended: true}));
-        api.use(bodyParser.json({limit: '10mb', extended: true}));
-        api.use(cors()); //allow cross domain requesting of urls
-        api.use(morgan('combined'))
-
-        //url to check health of server
-        api.use('/health',function(req,res){
-
-            res.json({
-                health : true
-            });
-
-        });
-        api.use((err, req, res, next) => {
-            handleError(err, res);
-        })
-        //ignore this route
-        api.use('/s',express.static('./src/public'))
-        api.set('x-powered-by',false);
-        api.set('signature', this.options.signature);
-
-        this.api     = api;
-
-        return true;
-    }
-
-    async mountRoutes(){
-        /**
-         * Plug your routes here.
-         * Eg: this.api.use(UserRoute);
-         */
-
-        return true;
-    }
-    /**
-     * @startServer
-     * start the server on the specifed port in the options
-     */
-    async startServer(){
-        // MongoDB database connection goes here
-        // connectMongodb(this.options.mongodb.uri)
-
-        // Mysql database connection goes here
-        // connectMySQL(this.options.mysql)
-    
-        var serverConfigStatus = await this.configServer();
-
-        if(serverConfigStatus !== true){
-            console.log("FATAL: Failed to configure server")
-            return false;
-        }
-
-        await this.mountRoutes();
-
-        // start the server
-        this.api.listen( this.options.port,() =>{
-            console.log(chalk.blue("INFO: Server Started."));
-            console.log(chalk.green(`Listening on http://127.0.0.1:${this.options.port}`));
-        });
-    }
-
+    await this.mountRoutes();
+    this.api.use((req, res, next) => {
+      const error = new Error("Not Found");
+      error.status = 404;
+      next(error);
+    });
+    this.api.use((error, req, res, next) => {
+      const status = error.status || 500;
+      res.status(status).json({
+        error: {
+          status,
+          message: error.message || "Internal Server Error",
+        },
+      });
+    });
+    this.api.listen(this.options.port, () => {
+      logger.info(`Listening on http://127.0.0.1:${this.options.port}`);
+    });
+  }
 }
 
 module.exports = Server;

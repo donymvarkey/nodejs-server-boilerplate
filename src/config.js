@@ -4,8 +4,8 @@
  * Modiy the config to fit your own use case
  */
 
-var appRoot = require('app-root-path');
-var winston = require('winston');
+var appRoot = require("app-root-path");
+var winston = require("winston");
 
 /**
  * Config for winston to log to a file and console
@@ -13,19 +13,18 @@ var winston = require('winston');
  */
 var options = {
   file: {
-    level: 'info',
+    level: "error",
     filename: `${appRoot}/logs/app.log`,
     handleExceptions: true,
     json: true,
     maxsize: 5242880, // 5MB
     maxFiles: 5,
-    colorize: false,
   },
   console: {
-    level: 'debug',
+    level: "debug",
     handleExceptions: true,
-    json: true,
-    colorize: true,
+    json: false,
+    colorize: false,
   },
 };
 
@@ -33,7 +32,7 @@ var options = {
 var logger = new winston.createLogger({
   transports: [
     new winston.transports.File(options.file),
-    new winston.transports.Console(options.console)
+    new winston.transports.Console(options.console),
   ],
   exitOnError: false, // do not exit on handled exceptions
 });
