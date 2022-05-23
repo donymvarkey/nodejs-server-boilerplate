@@ -1,11 +1,11 @@
-const returnResponse = require("../utils/response/ResponseHandler");
+const apiResponse = require("../helpers/apiResponse");
 const signIn = async (req, res, next) => {
   const data = {
     email: "test@email.com",
     password: "test",
     id: "5e9f8f9b8d8f8b1c8c8f9b8",
   };
-  returnResponse({ code: 200, msg: "Success", data: data }, res);
+  return apiResponse.successResponseWithData(res, "Login Successful", data);
 };
 
 module.exports = {

@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const { connectMongodb } = require("./database/DataBaseController");
 const { logger } = require("./config");
+const { ErrorResponse } = require("./helpers/apiResponse");
 
 const AuthRoute = require("./routes/AuthRoute");
 
@@ -44,7 +45,7 @@ class Server {
   }
 
   async startServer() {
-    // connectMongodb(this.options.mongodb.uri)
+    connectMongodb(this.options.mongodb.uri);
 
     var serverConfigStatus = await this.configServer();
 
@@ -59,17 +60,14 @@ class Server {
       error.status = 404;
       next(error);
     });
+
     this.api.use((error, req, res, next) => {
-      const status = error.status || 500;
-      res.status(status).json({
-        error: {
-          status,
-          message: error.message || "Internal Server Error",
-        },
-      });
+      const msg = error.message || "Internal Server Error";
+      return ErrorResponse(res, msg);
     });
+
     this.api.listen(this.options.port, () => {
-      logger.info(`Listening on http://127.0.0.1:${this.options.port}`);
+      logger.info(`Listening on http://localhost:${this.options.port}`);
     });
   }
 }

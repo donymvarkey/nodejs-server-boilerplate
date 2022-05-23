@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const returnResponse = require("./utils/response/ResponseHandler");
+const apiResponse = require("./helpers/apiResponse");
 const defaults = require("./defaults");
 module.exports = {
   allowCrossDomain: function (req, res, next) {
@@ -28,8 +28,7 @@ module.exports = {
       verificationHeader === null ||
       verificationHeader === ""
     ) {
-      returnResponse(401, "Unauthorized", {}, res);
-      return;
+      return apiResponse.unAuthorizedResponse(res, "Unauthorized user");
     }
 
     try {
@@ -48,8 +47,7 @@ module.exports = {
     try {
       let verify = jwt.verify(verificationHeader, process.env.SIGNATURE);
       if (verify.userType !== "admin") {
-        returnResponse(401, "Unauthorized", {}, res);
-        return;
+        return apiResponse.unAuthorizedResponse(res, "Unauthorized role");
       }
 
       next();
