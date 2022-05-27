@@ -29,7 +29,6 @@
   "dependencies": {
     "app-root-path": "^3.0.0",
     "bluebird": "^3.7.2",
-    "body-parser": "^1.20.0",
     "chalk": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",

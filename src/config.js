@@ -1,9 +1,3 @@
-/**
- * config.js
- * This file contains config for your application.
- * Modiy the config to fit your own use case
- */
-
 var appRoot = require("app-root-path");
 var winston = require("winston");
 
@@ -34,7 +28,7 @@ var logger = new winston.createLogger({
     new winston.transports.File(options.file),
     new winston.transports.Console(options.console),
   ],
-  exitOnError: false, // do not exit on handled exceptions
+  exitOnError: false,
 });
 
 module.exports = { logger };

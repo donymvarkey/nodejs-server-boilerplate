@@ -1,10 +1,9 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const cors = require("cors");
 const { connectMongodb } = require("./database/DataBaseController");
 const { logger } = require("./config");
-const { ErrorResponse } = require("./helpers/apiResponse");
+const { ErrorResponse, notFoundResponse } = require("./helpers/apiResponse");
 
 const AuthRoute = require("./routes/AuthRoute");
 
@@ -18,8 +17,8 @@ class Server {
   async configServer() {
     var api = express();
 
-    api.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
-    api.use(bodyParser.json({ limit: "10mb", extended: true }));
+    api.use(express.urlencoded({ limit: "10mb", extended: true }));
+    api.use(express.json({ limit: "10mb", extended: true }));
     api.use(cors()); //allow cross domain requesting of urls
     api.use(morgan("dev"));
 
@@ -32,7 +31,6 @@ class Server {
 
     // api.use("/s", express.static("./src/public"));
     api.set("x-powered-by", false);
-    api.set("signature", this.options.signature);
 
     this.api = api;
 
@@ -45,8 +43,6 @@ class Server {
   }
 
   async startServer() {
-    connectMongodb(this.options.mongodb.uri);
-
     var serverConfigStatus = await this.configServer();
 
     if (serverConfigStatus !== true) {
@@ -54,10 +50,11 @@ class Server {
       return false;
     }
 
+    connectMongodb(this.options.mongodb.uri);
     await this.mountRoutes();
+
     this.api.use((req, res, next) => {
-      const error = new Error("Not Found");
-      error.status = 404;
+      notFoundResponse(res, "Endpoint not found");
       next(error);
     });
 

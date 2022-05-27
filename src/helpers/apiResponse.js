@@ -47,3 +47,12 @@ const unAuthorizedResponse = (res, msg) => {
   };
   return res.status(401).json(data);
 };
+
+module.exports = {
+  succesResponse,
+  succesResponseWithData,
+  ErrorResponse,
+  notFoundResponse,
+  validationErrorWithData,
+  unAuthorizedResponse,
+};
