@@ -1,5 +1,8 @@
-const Server = require("./src/Server");
-const dotenv = require("dotenv").config();
+// const Server = require("./src/Server");
+import { config } from "dotenv";
+import Server from "./src/Server.js";
+
+config();
 
 const options = {
   port: process.env.PORT,
@@ -9,6 +12,6 @@ const options = {
   signature: process.env.SIGNATURE,
 };
 
-app = new Server(options);
+const app = new Server(options);
 
 app.startServer();

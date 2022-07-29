@@ -1,8 +1,9 @@
 {
   "name": "nodejs-server-boilerplate",
-  "version": "1.0.0",
+  "version": "1.0.1s",
   "description": "Boilerplate for a Node.js Server with either MySQL or MONGODB as database. (Ofcourse you can use some other databases.)",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js ",
@@ -15,7 +16,6 @@
   "keywords": [
     "backend",
     "nodejs",
-    "mysql",
     "mongodb",
     "server",
     "template"

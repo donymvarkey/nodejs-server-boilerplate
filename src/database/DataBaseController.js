@@ -4,10 +4,13 @@
  * Add controller for other databases from here
  * Remove the controller code which you don't need and also remove the imports.
  */
-const mongoose = require("mongoose");
-const { logger } = require("../config");
+// const mongoose = require("mongoose");
+// const { logger } = require("../config");
 
-connectMongodb = async (uri) => {
+import mongoose from "mongoose";
+import { logger } from "../config.js";
+
+export const connectMongodb = async (uri) => {
   mongoose.Promise = global.Promise;
   await mongoose
     .connect(uri, {
@@ -20,8 +23,4 @@ connectMongodb = async (uri) => {
     .catch((err) => {
       logger.error("Failed to connect to MongoDB: ", err);
     });
-};
-
-module.exports = {
-  connectMongodb,
 };

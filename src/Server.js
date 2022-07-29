@@ -1,13 +1,21 @@
-const express = require("express");
-const morgan = require("morgan");
-const cors = require("cors");
-const { connectMongodb } = require("./database/DataBaseController");
-const { logger } = require("./config");
-const { ErrorResponse, notFoundResponse } = require("./helpers/apiResponse");
+// const express = require("express");
+// const morgan = require("morgan");
+// const cors = require("cors");
+// const { connectMongodb } = require("./database/DataBaseController");
+// const { logger } = require("./config");
+// const { ErrorResponse, notFoundResponse } = require("./helpers/apiResponse");
+"use strict";
 
-const AuthRoute = require("./routes/AuthRoute");
+import express from "express";
+import morgan from "morgan";
+import cors from "cors";
+import { connectMongodb } from "./database/DataBaseController.js";
+import { logger } from "./config.js";
+import { ErrorResponse, notFoundResponse } from "./helpers/apiResponse.js";
 
-class Server {
+// import { signIn } from "./routes/AuthRoute.js";
+
+export default class Server {
   constructor(options) {
     this.options = options;
 
@@ -38,7 +46,7 @@ class Server {
   }
 
   async mountRoutes() {
-    this.api.use("/api/auth", AuthRoute);
+    // this.api.use("/api/auth", AuthRoute);
     return true;
   }
 
@@ -68,5 +76,3 @@ class Server {
     });
   }
 }
-
-module.exports = Server;

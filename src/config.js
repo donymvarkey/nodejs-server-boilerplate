@@ -1,5 +1,5 @@
-var appRoot = require("app-root-path");
-var winston = require("winston");
+import appRootPath from "app-root-path";
+import winston from "winston";
 
 /**
  * Config for winston to log to a file and console
@@ -8,7 +8,7 @@ var winston = require("winston");
 var options = {
   file: {
     level: "error",
-    filename: `${appRoot}/logs/app.log`,
+    filename: `${appRootPath}/logs/app.log`,
     handleExceptions: true,
     json: true,
     maxsize: 5242880, // 5MB
@@ -23,12 +23,10 @@ var options = {
 };
 
 // instantiate a new Winston Logger with the settings defined above
-var logger = new winston.createLogger({
+export const logger = new winston.createLogger({
   transports: [
     new winston.transports.File(options.file),
     new winston.transports.Console(options.console),
   ],
   exitOnError: false,
 });
-
-module.exports = { logger };
