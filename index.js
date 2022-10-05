@@ -1,8 +1,6 @@
-// const Server = require("./src/Server");
-import { config } from "dotenv";
-import Server from "./src/Server.js";
+require('dotenv').config()
+const Server = require("./src/Server");
 
-config();
 
 const options = {
   port: process.env.PORT,
@@ -10,6 +8,7 @@ const options = {
     uri: process.env.MONGO_URL,
   },
   signature: process.env.SIGNATURE,
+  nodeEnv: process.env.NODE_ENV
 };
 
 const app = new Server(options);

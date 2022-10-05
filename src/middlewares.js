@@ -20,7 +20,7 @@ module.exports = {
   },
 
   isAuthorised: function (req, res, next) {
-    var verificationHeader = req.headers["x-auth-token"];
+    var verificationHeader = req.headers["Authorization"];
     var verify;
 
     if (

@@ -1,24 +1,16 @@
-// const express = require("express");
-// const morgan = require("morgan");
-// const cors = require("cors");
-// const { connectMongodb } = require("./database/DataBaseController");
-// const { logger } = require("./config");
-// const { ErrorResponse, notFoundResponse } = require("./helpers/apiResponse");
 "use strict";
+const express = require("express");
+const morgan = require("morgan");
+const cors = require("cors");
+const { connectMongodb } = require("./database/DataBaseController");
+const { logger } = require("./logger/Logger");
+const { ErrorResponse, notFoundResponse } = require("./helpers/apiResponse");
 
-import express from "express";
-import morgan from "morgan";
-import cors from "cors";
-import { connectMongodb } from "./database/DataBaseController.js";
-import { logger } from "./config.js";
-import { ErrorResponse, notFoundResponse } from "./helpers/apiResponse.js";
+const AuthRoute = require("./routes/AuthRoute");
 
-// import { signIn } from "./routes/AuthRoute.js";
-
-export default class Server {
+class Server {
   constructor(options) {
     this.options = options;
-
     this.api = null;
   }
 
@@ -46,16 +38,16 @@ export default class Server {
   }
 
   async mountRoutes() {
-    // this.api.use("/api/auth", AuthRoute);
+    this.api.use("/api/auth", AuthRoute);
     return true;
   }
 
   async startServer() {
     var serverConfigStatus = await this.configServer();
 
-    if (serverConfigStatus !== true) {
-      logger.error("FATAL: Failed to configure server");
-      return false;
+    if (serverConfigStatus !== true || this.options.nodeEnv === "" || this.options.nodeEnv === undefined) {
+      logger.error("Failed to configure server", serverConfigStatus);
+      process.exit(1);
     }
 
     connectMongodb(this.options.mongodb.uri);
@@ -76,3 +68,5 @@ export default class Server {
     });
   }
 }
+
+module.exports = Server;

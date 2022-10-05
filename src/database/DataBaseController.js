@@ -1,16 +1,12 @@
 /**
  * DataBaseController.js
- * Includes controllers for MongoDB and MySQL
+ * Includes controllers for MongoDB 
  * Add controller for other databases from here
- * Remove the controller code which you don't need and also remove the imports.
  */
-// const mongoose = require("mongoose");
-// const { logger } = require("../config");
+const mongoose = require("mongoose")
+const { logger } = require("../logger/Logger")
 
-import mongoose from "mongoose";
-import { logger } from "../config.js";
-
-export const connectMongodb = async (uri) => {
+const connectMongodb = async (uri) => {
   mongoose.Promise = global.Promise;
   await mongoose
     .connect(uri, {
@@ -24,3 +20,5 @@ export const connectMongodb = async (uri) => {
       logger.error("Failed to connect to MongoDB: ", err);
     });
 };
+
+module.exports = { connectMongodb }

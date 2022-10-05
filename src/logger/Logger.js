@@ -1,32 +1,29 @@
 "use strict";
-
-import appRootPath from "app-root-path";
-import winston from "winston";
-
-const logTime = new Date().toLocaleDateString();
-const customLog = printf(({ level, message }) => {
-  return `Level:[${level}] LogTime: [${logTime}] Message:-[${message}]`;
-});
+const { createLogger, format, transports } = require("winston");
 
 // Custom date for logging files with date of occurance
 const date = new Date();
-const newdate = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`;
 
 const options = {
   info: {
     level: "info",
-    dirname: "logs/combibned",
+    dirname: "logs/info",
     json: true,
     handleExceptions: true,
     datePattern: "YYYY-MM-DD-HH",
-    filename: `combined-${newdate}.log`,
+    filename: `info.log`,
+    format: format.combine(
+      format.printf((i) =>
+        i.level === "info" ? `${i.level}: ${i.timestamp} ${i.message}` : ""
+      )
+    ),
   },
   error: {
     level: "error",
     dirname: "logs/error",
     json: true,
     handleExceptions: true,
-    filename: `error-${newdate}.log`,
+    filename: `error.log`,
   },
   console: {
     level: "debug",
@@ -37,7 +34,11 @@ const options = {
 };
 
 const logger = new createLogger({
-  format: combine(customLog),
+  format: format.combine(
+    format.timestamp({ format: "MMM-DD-YYYY HH:mm:ss" }),
+    format.align(),
+    format.printf((i) => `${i.level}: ${[i.timestamp]}: ${i.message}`)
+  ),
   transports: [
     new transports.File(options.info),
     new transports.File(options.error),
@@ -46,4 +47,4 @@ const logger = new createLogger({
   exitOnError: false,
 });
 
-module.exports = logger;
+module.exports = { logger };
