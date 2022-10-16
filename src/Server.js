@@ -43,12 +43,7 @@ class Server {
   }
 
   async startServer() {
-    var serverConfigStatus = await this.configServer();
-
-    if (serverConfigStatus !== true || this.options.nodeEnv === "" || this.options.nodeEnv === undefined) {
-      logger.error("Failed to configure server", serverConfigStatus);
-      process.exit(1);
-    }
+    await this.configServer();
 
     connectMongodb(this.options.mongodb.uri);
     await this.mountRoutes();
