@@ -7,6 +7,7 @@ const mongoose = require("mongoose")
 const { logger } = require("../logger/Logger")
 
 const connectMongodb = async (uri) => {
+  logger.info("Connecting to mongodb", uri);
   mongoose.Promise = global.Promise;
   await mongoose
     .connect(uri, {
