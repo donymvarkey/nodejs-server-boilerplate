@@ -1,7 +1,7 @@
 {
   "name": "nodejs-server-boilerplate",
-  "version": "1.0.3",
-  "description": "Boilerplate for a Node.js Server with either MySQL or MONGODB as database. (Ofcourse you can use some other databases.)",
+  "version": "1.0.4",
+  "description": "Boilerplate for a Node.js Server with MONGODB as database",
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
@@ -10,7 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "repository": {
     "type": "git",

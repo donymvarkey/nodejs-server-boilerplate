@@ -3,8 +3,8 @@
  * Includes controllers for MongoDB
  * Add controller for other databases from here
  */
-const mongoose = require("mongoose");
-const { logger } = require("../logger/Logger");
+const mongoose = require('mongoose');
+const { logger } = require('../logger/Logger');
 
 const connectMongodb = async (uri) => {
   logger.info(`Connecting to mongodb: ${uri}`);
@@ -12,7 +12,7 @@ const connectMongodb = async (uri) => {
   await mongoose
     .connect(uri)
     .then(() => {
-      logger.info("Connected to mongodb instance");
+      logger.info('Connected to mongodb instance');
       return true;
     })
     .catch((err) => {
