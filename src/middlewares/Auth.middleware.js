@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const apiResponse = require("../helpers/apiResponse");
 
 module.exports = {
   allowCrossDomain: function (req, res, next) {
@@ -20,34 +19,44 @@ module.exports = {
   },
 
   isAuthorised: function (req, res, next) {
-    var verificationHeader = req.headers["Authorization"];
-    var verify;
+    const verificationHeader = req.headers["authorization"];
+    const accessToken = verificationHeader?.split(" ")[1];
 
-    if (
-      verificationHeader === undefined ||
-      verificationHeader === null ||
-      verificationHeader === ""
-    ) {
-      return apiResponse.unAuthorizedResponse(res, "Unauthorized user");
+    // Check if the Authorization header is missing or empty
+    if (!verificationHeader) {
+      return res.status(401).json({
+        status: false,
+        msg: "Unauthorized User",
+      });
     }
 
-    try {
-      verify = jwt.verify(verificationHeader, process.env.SIGNATURE);
-      req.user = verify;
+    // Verify the JWT token
+    jwt.verify(accessToken, process.env.ATK_SECRET, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({
+          status: false,
+          msg: "Invalid or expired token",
+        });
+      }
 
+      // Attach the decoded user information to the request object
+      req.user = decoded;
+
+      // Proceed to the next middleware
       next();
-    } catch (e) {
-      next(e);
-    }
+    });
   },
 
   isAdmin: function (req, res, next) {
     let verificationHeader = req.headers["x-auth-token"];
 
     try {
-      let verify = jwt.verify(verificationHeader, process.env.SIGNATURE);
+      let verify = jwt.verify(verificationHeader, process.env.ATK_SECRET);
       if (verify.role !== "admin") {
-        return apiResponse.unAuthorizedResponse(res, "Unauthorized role");
+        return res.status(401).json({
+          status: false,
+          msg: "Access denied!",
+        });
       }
 
       next();

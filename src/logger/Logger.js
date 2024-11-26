@@ -1,33 +1,26 @@
 "use strict";
 const { createLogger, format, transports } = require("winston");
-
-// Custom date for logging files with date of occurance
-const date = new Date();
+require("winston-daily-rotate-file");
 
 const options = {
-  info: {
-    level: "info",
-    dirname: "logs/info",
+  error: {
+    level: "error",
+    dirname: "logs",
     json: true,
     handleExceptions: true,
-    datePattern: "YYYY-MM-DD-HH",
-    filename: `info.log`,
+    datePattern: "YYYY-MM-DD",
+    filename: `app_log_%DATE%.log`,
+    maxSize: "10m",
+    maxFiles: "7d",
     format: format.combine(
       format.printf((i) =>
-        i.level === "info" ? `${i.level}: ${i.timestamp} ${i.message}` : ""
+        i.level === "error" ? `${i.level}: ${i.timestamp} ${i.message}` : ""
       )
     ),
   },
-  error: {
-    level: "error",
-    dirname: "logs/error",
-    json: true,
-    handleExceptions: true,
-    filename: `error.log`,
-  },
   console: {
     level: "debug",
-    json: false,
+    json: true,
     handleExceptions: true,
     colorize: true,
   },
@@ -35,13 +28,14 @@ const options = {
 
 const logger = new createLogger({
   format: format.combine(
-    format.timestamp({ format: "MMM-DD-YYYY HH:mm:ss" }),
+    format.timestamp({ format: "DD-MMM-YYYY hh:mm:ss a" }),
     format.align(),
-    format.printf((i) => `${i.level}: ${[i.timestamp]}: ${i.message}`)
+    format.printf(
+      (i) => `${i.level.toUpperCase()}: ${[i.timestamp]}: ${i.message}`
+    )
   ),
   transports: [
-    new transports.File(options.info),
-    new transports.File(options.error),
+    new transports.DailyRotateFile(options.error),
     new transports.Console(options.console),
   ],
   exitOnError: false,

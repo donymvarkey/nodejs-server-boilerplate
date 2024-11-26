@@ -8,7 +8,7 @@ const comparePassword = (password, hashedPassword) => {
   return bcrypt.compareSync(password, hashedPassword);
 };
 
-const getPaginatedData = async (model, pageNo, size) => {
+const getPaginatedData = async (model, pageNo, size = 10) => {
   const q = {};
   q.skip = size * (pageNo - 1);
   q.limit = size;

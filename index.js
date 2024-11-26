@@ -1,6 +1,5 @@
-require('dotenv').config()
+require("dotenv").config();
 const Server = require("./src/Server");
-
 
 const options = {
   port: process.env.PORT,
@@ -8,7 +7,7 @@ const options = {
     uri: process.env.MONGO_URL,
   },
   signature: process.env.SIGNATURE,
-  nodeEnv: process.env.NODE_ENV
+  nodeEnv: process.env.NODE_ENV,
 };
 
 const app = new Server(options);
