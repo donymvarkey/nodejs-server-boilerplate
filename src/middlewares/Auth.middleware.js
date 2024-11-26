@@ -1,16 +1,16 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
 module.exports = {
   allowCrossDomain: function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, x-auth-token, X-Requested-With, Content-Type"
+      'Access-Control-Allow-Headers',
+      'Origin, x-auth-token, X-Requested-With, Content-Type',
     );
 
     // intercept OPTIONS method
-    if ("OPTIONS" == req.method) {
+    if ('OPTIONS' === req.method) {
       //res.sendStatus(200);
       next();
     } else {
@@ -18,15 +18,15 @@ module.exports = {
     }
   },
 
-  isAuthorised: function (req, res, next) {
-    const verificationHeader = req.headers["authorization"];
-    const accessToken = verificationHeader?.split(" ")[1];
+  isAuthorized: function (req, res, next) {
+    const verificationHeader = req.headers['authorization'];
+    const accessToken = verificationHeader?.split(' ')[1];
 
     // Check if the Authorization header is missing or empty
     if (!verificationHeader) {
       return res.status(401).json({
         status: false,
-        msg: "Unauthorized User",
+        msg: 'Unauthorized User',
       });
     }
 
@@ -35,7 +35,7 @@ module.exports = {
       if (err) {
         return res.status(401).json({
           status: false,
-          msg: "Invalid or expired token",
+          msg: 'Invalid or expired token',
         });
       }
 
@@ -48,14 +48,14 @@ module.exports = {
   },
 
   isAdmin: function (req, res, next) {
-    let verificationHeader = req.headers["x-auth-token"];
+    const verificationHeader = req.headers['x-auth-token'];
 
     try {
-      let verify = jwt.verify(verificationHeader, process.env.ATK_SECRET);
-      if (verify.role !== "admin") {
+      const verify = jwt.verify(verificationHeader, process.env.ATK_SECRET);
+      if (verify.role !== 'admin') {
         return res.status(401).json({
           status: false,
-          msg: "Access denied!",
+          msg: 'Access denied!',
         });
       }
 

@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
 /**
@@ -12,11 +12,12 @@ const router = express.Router();
  *      200:
  *        description: Server running
  */
-router.get("/", (req, res, next) => {
+router.get('/', (req, res, next) => {
   res.status(200).json({
     status: true,
-    msg: "Server is running",
+    msg: 'Server is running',
   });
+  next();
 });
 
 module.exports = router;
