@@ -1,0 +1,29 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3456:3456'
+    environment:
+      - DATABASE_URL=mongodb://mongo:27017/test
+      - PORT=3456
+      - ENV=${NODE_ENV}
+      - SERVER_URL=http://localhost:3456
+      - SECRET=secret_key
+    depends_on:
+      - mongo
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

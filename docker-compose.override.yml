@@ -1,0 +1,4 @@
+name: nodejs_boilerplate
+services:
+  app:
+    command: ['npm', 'run', 'dev'] # Use the `dev` script instead of default

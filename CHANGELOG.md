@@ -10,7 +10,7 @@
 - Prettier setup
 - husky setup
 
-v1.0.6
+### v1.0.6
 
 - Restructure project directory
 - Implement new logging logic
@@ -20,3 +20,7 @@ v1.0.6
 - Implement new helper functions for handling response and errors
 - Implement global error handler
 - Take server url and env from .env in Swagger config
+
+### v1.0.7
+
+- Docker implementation
