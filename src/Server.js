@@ -6,11 +6,14 @@ const { createServer } = require('node:http');
 const helmet = require('helmet');
 const swaggerUi = require('swagger-ui-express');
 const { connectMongodb } = require('./database/DataBaseController');
-const { logger } = require('./logger/Logger');
 const { swaggerSpec } = require('./config/Swagger');
 
 // Import Routes
 const HealthRoute = require('./routes/HealthRoute');
+const logger = require('./utils/logger');
+const responseMessages = require('./constants/responseMessages');
+const httpError = require('./utils/httpError');
+const globalErrorhandler = require('./middlewares/globalErrorHandler');
 
 class Server {
   constructor(options) {
@@ -54,35 +57,38 @@ class Server {
     await this.configServer();
     await this.mountRoutes();
 
-    this.api.use((req, res) => {
-      logger.error('Route not found');
-      res.status(404).json({
-        msg: 'Route not found',
-        status: false,
-      });
+    // Handling not for API endpoints
+    this.api.use((req, res, next) => {
+      try {
+        throw new Error(responseMessages.NOT_FOUND('route'));
+      } catch (error) {
+        httpError(next, error, req, 404);
+      }
     });
 
-    this.api.use((error, req, res, next) => {
-      const msg = error.message || 'Internal Server Error';
-      logger.error(
-        `Host: ${req?.hostname} :: Protocol: ${req?.protocol} :: URL: ${req?.originalUrl} :: Error: ${msg}`,
-      );
-      res.status(500).json({
-        msg: 'Internal server error',
-        status: false,
-      });
-      next();
-    });
+    // Global error handler
+    this.api.use(globalErrorhandler);
 
+    // Start server
     this.httpServer.listen(this.options.port, async () => {
-      logger.info(`Listening on port ${this.options.port}`);
-      await connectMongodb(this.options.mongodb.uri);
+      logger.info('APPLICATION_STARTED', {
+        meta: {
+          PORT: this.options.port,
+          SERVER_URL: this.options.server_url,
+        },
+      });
+      this.options.db_url && (await connectMongodb(this.options.db_url));
     });
 
+    // Handle user interrupts eg: CTRL+C, CTRL+Z
     const shutdown = (signal) => {
-      logger.info(`Received signal ${signal}. Shutting down gracefully`);
+      logger.info('RECEIVED SIGNAL', {
+        meta: {
+          signal: signal,
+        },
+      });
       this.httpServer.close(() => {
-        logger.info('Closed out remaining connections');
+        logger.info('Shutting down server gracefully!');
         process.exit(0);
       });
 
@@ -97,6 +103,7 @@ class Server {
 
     process.on('SIGTERM', shutdown);
     process.on('SIGINT', shutdown);
+    process.on('SIGTSTP', shutdown);
   }
 }
 

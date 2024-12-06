@@ -5,4 +5,5 @@
 /logs
 
 # exclude the .env file
-.env
+.env.*
+!.env.example

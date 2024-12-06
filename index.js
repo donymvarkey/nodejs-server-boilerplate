@@ -1,13 +1,12 @@
-require('dotenv').config();
 const Server = require('./src/Server');
+const appConfig = require('./src/config');
 
 const options = {
-  port: process.env.PORT,
-  mongodb: {
-    uri: process.env.MONGO_URL,
-  },
-  signature: process.env.SIGNATURE,
-  nodeEnv: process.env.NODE_ENV,
+  port: appConfig.port,
+  db_url: appConfig.database_url,
+  secret: appConfig.secret,
+  nodeEnv: appConfig.env,
+  server_url: appConfig.server_url,
 };
 
 const app = new Server(options);

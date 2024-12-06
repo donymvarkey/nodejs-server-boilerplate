@@ -23,17 +23,23 @@ project-root/
 ├── logs/ # Contains application logs
 ├── src/
 │ ├── config/ # Configuration files
+| | |-- index.js # Contains app config
+| | |-- Swagger.js # Swagger configuration
 │ ├── controllers/ # Route controllers for all API endpoints
 | ├── database/ # Database connection methods
-│ ├── helpers/ # Helper functions and utilities
+| | |-- DatabaseController.js
+│ ├── utils/ # Utility functions
 │ ├── logger/ # Custom Logger configurations
 │ ├── middlewares/ # Custom Express middlewares
+| | |-- Auth.middleware.js # handles authorization
+| | |-- globalErrorhandler.js # error handler middleware
 │ ├── models/ # Database models (e.g., Mongoose schemas)
 │ ├── routes/ # API routes
+| | |-- HealthRoute.js # /api/health --> check server health
 │ ├── services/ # Business logic and services
 │ └── Server.js # http server configurations
 │
-├── .env # Environment variables
+├── .env.example # Environment variables example development -> .env.development production -> .env.production
 ├── .eslintrc.js # ESLint configuration
 ├── .prettierrc # Prettier configuration
 ├── .gitignore # Git ignore configuration
@@ -67,11 +73,12 @@ project-root/
 
 ## Configuration
 
-|  Variable   |               Description                |        Default Value        |
-| :---------: | :--------------------------------------: | :-------------------------: |
-|   `PORT`    |       Port to run the application        |           `5000`            |
-| `MONGO_URL` |        Database Connection String        | `mongodb://localhost:27017` |
-| `SIGNATURE` | Hashed secret key for signing JWT tokens |             nil             |
+|   Variable   |               Description                |        Default Value        |
+| :----------: | :--------------------------------------: | :-------------------------: |
+|    `PORT`    |       Port to run the application        |           `5000`            |
+| `MONGO_URL`  |        Database Connection String        | `mongodb://localhost:27017` |
+|   `SECRET`   | Hashed secret key for signing JWT tokens |             nil             |
+| `SERVER_URL` |                Server URL                |   `http://localhost:5000`   |
 
 ## Contribution
 
