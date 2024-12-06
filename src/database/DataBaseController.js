@@ -4,19 +4,19 @@
  * Add controller for other databases from here
  */
 const mongoose = require('mongoose');
-const { logger } = require('../logger/Logger');
+const logger = require('../utils/logger');
 
 const connectMongodb = async (uri) => {
-  logger.info(`Connecting to mongodb: ${uri}`);
+  logger.info('CONNECTING TO DB', { meta: { url: uri } });
   mongoose.Promise = global.Promise;
   await mongoose
     .connect(uri)
     .then(() => {
-      logger.info('Connected to mongodb instance');
+      logger.info('CONNECTED TO DB', null);
       return true;
     })
     .catch((err) => {
-      logger.error(`Failed to connect to MongoDB: ${err}`);
+      logger.error('CONNECTION FAILED', { meta: { error: err } });
       return false;
     });
 };

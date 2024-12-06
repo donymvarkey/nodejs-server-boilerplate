@@ -1,4 +1,5 @@
 const express = require('express');
+const { healthController } = require('../controllers/HealthController');
 const router = express.Router();
 
 /**
@@ -12,12 +13,8 @@ const router = express.Router();
  *      200:
  *        description: Server running
  */
-router.get('/', (req, res, next) => {
-  res.status(200).json({
-    status: true,
-    msg: 'Server is running',
-  });
-  next();
+router.get('/', async (req, res) => {
+  await healthController(req, res);
 });
 
 module.exports = router;

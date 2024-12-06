@@ -1,4 +1,5 @@
 const swaggerJsDoc = require('swagger-jsdoc');
+const appConfig = require('.');
 
 const options = {
   definition: {
@@ -15,8 +16,8 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:8000/',
-        description: 'Development',
+        url: appConfig.server_url,
+        description: appConfig.env,
       },
       // More URLS here
     ],
